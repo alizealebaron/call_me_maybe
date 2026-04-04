@@ -34,7 +34,8 @@
 
 ### Aide à l'utilisation de JSON
 
-- [JSON en Python](https://brightdata.fr/blog/savoir-faire/parse-json-data-with-python)
+- [Analyser les données JSON en Python](https://brightdata.fr/blog/savoir-faire/parse-json-data-with-python)
+- [Utiliser JSON avec Python](https://www.docstring.fr/glossaire/json/)
 
 ### Autres projets Call Me Maybe
 
