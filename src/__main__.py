@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 10:38:21 by alebaron                                #
-# @update   : 2026/04/04 12:23:01 by alebaron                                #
+# @update   : 2026/04/04 12:24:33 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -21,6 +21,7 @@
 import sys
 import os
 from src.parsing.parsing_args import check_args
+
 
 # +-------------------------------------------------------------------------+
 # |                                  Main                                   |
@@ -36,7 +37,6 @@ def main():
     # === Parsing arguments ===
 
     file_path = check_args(argc, argv)
-    
 
 
 if __name__ == "__main__":
