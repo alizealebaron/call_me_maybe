@@ -30,7 +30,7 @@
 **Rendu le :** Non rendu.
 
 
-## 🗃️ Resources
+## 🗃️ Ressources
 
 ### Aide à l'utilisation de JSON
 

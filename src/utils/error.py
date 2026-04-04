@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/02/27 14:26:28 by alebaron                                #
-# @update   : 2026/04/04 10:56:27 by alebaron                                #
+# @update   : 2026/04/04 16:11:49 by alebaron                                #
 # ************************************************************************** #
 
 # +--------------------------------------------------------------------------+
@@ -56,3 +56,15 @@ def print_error(error_type: Exception, message: str) -> None:
         message (str): The error message to be printed.
     """
     print(f"{error_type.__class__.__name__}: {message}")
+
+
+def exit_argument_error(message: str, file: str) -> None:
+    """
+    Exit the program with a parsing error message.
+
+    Args:
+        message (str): The error message to display.
+        file (str): The file where the error occurred.
+    """
+
+    exit_error(ArgumentError(), message + f" (File: {file})")

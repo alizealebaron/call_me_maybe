@@ -6,11 +6,11 @@
 #         |_|   |_____| .fr         \_.____,*      (___/  (___/  (___/       #
 #                                                                            #
 # ************************************************************************** #
-# @name   : __main__.py                                                      #
+# @name   : parsing_json.py                                                  #
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
-# @creation : 2026/04/04 10:38:21 by alebaron                                #
-# @update   : 2026/04/04 16:34:50 by alebaron                                #
+# @creation : 2026/04/04 16:00:28 by alebaron                                #
+# @update   : 2026/04/04 16:33:45 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -18,38 +18,25 @@
 # +-------------------------------------------------------------------------+
 
 
-import sys
-import os
-from src.parsing.parsing_args import check_args
-from src.parsing.parsing_json import check_json
+import json
+from typing import Tuple
+from src.utils.error import exit_error, ParsingError
 
 
 # +-------------------------------------------------------------------------+
-# |                                  Main                                   |
+# |                                 Methods                                 |
 # +-------------------------------------------------------------------------+
 
-def main():
+def check_json(file_path: dict[str, str]) -> Tuple[dict, dict]:
 
-    # === Get Main arguments ===
+    try:
+        with open(file_path["--functions_definition"], "r") as file:
+            dict_func = json.load(file)
 
-    argc = len(sys.argv)
-    argv = sys.argv
+        with open(file_path["--input"], "r") as file:
+            dict_input = json.load(file)
 
-    # === Parsing arguments ===
+    except Exception as e:
+        exit_error(ParsingError(), str(e))
 
-    file_path = check_args(argc, argv)
-    tuple_file = check_json(file_path)
-
-    # === Coming soon ===
-
-
-if __name__ == "__main__":
-    # try:
-    main()
-    # except KeyboardInterrupt:
-    #     os.system("clear")
-    #     file = open("src/utils/interrupt.txt", "r", encoding='utf-8')
-    #     content = file.read()
-    #     print(content)
-    # except Exception as e:
-    #     print(f"Error: {e}")
+    return (dict_func, dict_input)

@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 11:04:41 by alebaron                                #
-# @update   : 2026/04/04 12:22:19 by alebaron                                #
+# @update   : 2026/04/04 16:11:25 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -18,7 +18,7 @@
 # +-------------------------------------------------------------------------+
 
 
-from src.utils.error import ArgumentError, exit_error
+from src.utils.error import exit_argument_error, exit_error, ArgumentError
 
 
 # +-------------------------------------------------------------------------+
@@ -63,8 +63,8 @@ def check_args(argc: int, argv: list[str]) -> dict[str, str]:
     if (valid_options["--functions_definition"] == valid_options["--output"] or
        valid_options["--input"] == valid_options["--output"]):
 
-        exit_parsing_error("The output cannot be the same file as the input "
-                           "or the functions", valid_options["--output"])
+        exit_argument_error("The output cannot be the same file as the input "
+                            "or the functions", valid_options["--output"])
 
     # === Renvoie des données vérifiées ===
 
@@ -89,35 +89,19 @@ def check_file(filename: str) -> None:
             raise ArgumentError("Empty files are not allowed.")
 
     except FileNotFoundError:
-        exit_parsing_error("File not found. Check the path and "
-                           "try again.", filename)
+        exit_argument_error("File not found. Check the path and "
+                            "try again.", filename)
 
     except PermissionError:
-        exit_parsing_error("No permission to access the file."
-                           " Check your access rights.", filename)
+        exit_argument_error("No permission to access the file."
+                            " Check your access rights.", filename)
 
     except IsADirectoryError:
-        exit_parsing_error("Expected a file, but got directory "
-                           ". Please provide a file.", filename)
+        exit_argument_error("Expected a file, but got directory "
+                            ". Please provide a file.", filename)
 
     except ArgumentError as e:
-        exit_parsing_error(str(e), filename)
+        exit_argument_error(str(e), filename)
 
     except Exception as e:
-        exit_parsing_error(f"Unexcepted exception ({e}).", filename)
-
-
-# +-------------------------------------------------------------------------+
-# |                              Error Methods                              |
-# +-------------------------------------------------------------------------+
-
-def exit_parsing_error(message: str, file: str) -> None:
-    """
-    Exit the program with a parsing error message.
-
-    Args:
-        message (str): The error message to display.
-        file (str): The file where the error occurred.
-    """
-
-    exit_error(ArgumentError(), message + f" (File: {file})")
+        exit_argument_error(f"Unexcepted exception ({e}).", filename)
