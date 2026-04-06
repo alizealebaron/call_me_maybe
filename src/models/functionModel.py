@@ -6,11 +6,11 @@
 #         |_|   |_____| .fr         \_.____,*      (___/  (___/  (___/       #
 #                                                                            #
 # ************************************************************************** #
-# @name   : __main__.py                                                      #
+# @name   : function.py                                                      #
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
-# @creation : 2026/04/04 10:38:21 by alebaron                                #
-# @update   : 2026/04/06 10:47:30 by alebaron                                #
+# @creation : 2026/04/06 10:32:38 by alebaron                                #
+# @update   : 2026/04/06 10:37:37 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -18,52 +18,20 @@
 # +-------------------------------------------------------------------------+
 
 
-import sys
-import os
-import time
-from src.parsing.parsing_args import check_args
-from src.parsing.parsing_json import check_json
+from pydantic import BaseModel
 
 
 # +-------------------------------------------------------------------------+
-# |                                  Main                                   |
+# |                                  Class                                  |
 # +-------------------------------------------------------------------------+
 
-def main():
+class FunctionModel(BaseModel):
 
-    # === Starting time ===
+    # +---------------------------------------------------------------------+
+    # |                              Attributs                              |
+    # +---------------------------------------------------------------------+
 
-    start_time = time.time()
-
-    # === Get Main arguments ===
-
-    argc = len(sys.argv)
-    argv = sys.argv
-
-    # === Parsing arguments ===
-
-    file_path = check_args(argc, argv)
-    list_function, list_prompt = check_json(file_path)
-
-    # === Coming soon ===
-
-    print(list_prompt)
-
-    # === Calculate time ===
-
-    end_time = time.time()
-    prog_time = end_time - start_time
-
-    print(f"Programme executed in {prog_time}")
-
-
-if __name__ == "__main__":
-    # try:
-    main()
-    # except KeyboardInterrupt:
-    #     os.system("clear")
-    #     file = open("src/utils/interrupt.txt", "r", encoding='utf-8')
-    #     content = file.read()
-    #     print(content)
-    # except Exception as e:
-    #     print(f"Error: {e}")
+    name: str
+    description: str
+    parameters: dict[str, dict[str, str]]
+    returns: dict[str, str]
