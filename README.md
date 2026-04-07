@@ -40,3 +40,4 @@
 ### Autres projets Call Me Maybe
 
 - [Projet de shadox254](https://github.com/shadox254/Call-Me-Maybe)
+- [Projet de Sousampere](https://github.com/sousampere/42_call_me_maybe_v1.2)

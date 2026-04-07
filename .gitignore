@@ -208,3 +208,5 @@ __marimo__/
 
 .python-version
 test*
+hf_cache
+en.subject.pdf
