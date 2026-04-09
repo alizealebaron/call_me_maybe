@@ -210,3 +210,4 @@ __marimo__/
 test*
 hf_cache
 en.subject.pdf
+output/

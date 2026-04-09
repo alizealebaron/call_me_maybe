@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/06 10:51:17 by alebaron                                #
-# @update   : 2026/04/07 11:39:16 by alebaron                                #
+# @update   : 2026/04/09 10:51:24 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -72,12 +72,10 @@ class Call_Me_Maybe():
             prompt_output['name'] = func_name
 
             # Récupération des paramètres
-            # params = self.generate_parameters(prompt, fn_name)
-            # prompt_output['parameters'] = params
+            params = this.gen_func_param(prompt, func_name)
+            prompt_output['parameters'] = params
 
             output.append(prompt_output)
-
-            print(prompt_output)
 
         return output
 
@@ -114,7 +112,13 @@ class Call_Me_Maybe():
 
         current_output = ""
         current_tokens: List[int] = []
-        while True:
+        max_tokens = 100
+
+        while (True):
+
+            # Sécurité: limiter la longueur
+            if len(current_tokens) >= max_tokens:
+                break
 
             # Combiner les tokens: prompt + sortie actuelle
             all_tokens = full_prompt_tokens + current_tokens
@@ -150,11 +154,50 @@ class Call_Me_Maybe():
             token_string = this.__dict_vocab.get(best_token_id, "")
             current_output += token_string
 
+            # Sécurité: si token vide, arrêter pour éviter boucle infinie
+            if not token_string:
+                break
+
             # Vérifier si on a trouvé un nom complet
             if current_output in this.__list_name_function:
                 break
 
         return current_output
+
+    def gen_func_param(this, prompt: PromptModel,
+                       func_name: str) -> Dict[Any, Any]:
+
+        # Récupération des paramètres demandés
+        func_params = this.get_func_para_by_name(func_name)
+
+        # Génération des paramètres
+        output: Dict[str, Any] = {}
+        previous_gen = ""
+        for param in func_params:
+
+            previous_gen = ""
+            for arg in output.keys():
+                previous_gen = previous_gen + arg + "="
+                previous_gen += str(output[arg]) + "\n"
+
+            previous_gen = previous_gen + param + "="
+            if func_params[param]["type"] == "string":
+                output[param] = this.gen_str_parameter(
+                    prompt.prompt, func_name, previous_gen)
+            elif func_params[param]["type"] == "number":
+                output[param] = this.gen_int_parameter(
+                    prompt.prompt, func_name, previous_gen)
+        return output
+
+    def gen_int_parameter(this, prompt: str, func_name: str,
+                          previous_gen: str) -> float:
+
+        pass
+
+    def gen_str_parameter(this, prompt: str, func_name: str,
+                          previous_gen: str) -> str:
+
+        pass
 
     # +---------------------------------------------------------------------+
     # |                         Méthodes utilitaires                        |
@@ -193,3 +236,17 @@ class Call_Me_Maybe():
 
         except Exception as e:
             exit_error(Exception(), e)
+
+    def get_func_para_by_name(this, name: str) -> str | None:
+
+        for func in this.__list_function:
+            if func.name == name:
+                return func.parameters
+        return None
+
+    def get_func_by_name(this, name: str) -> FunctionModel | None:
+
+        for func in this.__list_function:
+            if func.name == name:
+                return func
+        return None

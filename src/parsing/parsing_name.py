@@ -6,11 +6,11 @@
 #         |_|   |_____| .fr         \_.____,*      (___/  (___/  (___/       #
 #                                                                            #
 # ************************************************************************** #
-# @name   : parsing_json.py                                                  #
+# @name   : parsing_name.py                                                  #
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
-# @creation : 2026/04/04 16:00:28 by alebaron                                #
-# @update   : 2026/04/07 13:53:27 by alebaron                                #
+# @creation : 2026/04/09 10:54:35 by alebaron                                #
+# @update   : 2026/04/09 11:02:01 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -19,33 +19,18 @@
 
 
 from typing import Tuple
-from json import JSONDecodeError, load
-from src.utils.error import exit_error, ParsingError
-from src.models.functionModel import FunctionModel
-from src.models.promptModel import PromptModel
 
 
 # +-------------------------------------------------------------------------+
 # |                                 Methods                                 |
 # +-------------------------------------------------------------------------+
 
-def check_json(file_path: dict[str, str]) -> Tuple[list[FunctionModel],
-                                                   list[PromptModel]]:
+def get_dir_and_name(full_path: str) -> Tuple[str, str]:
 
-    try:
-        with open(file_path["--functions_definition"], "r") as file:
-            data = load(file)
-            list_func = [FunctionModel(**arg) for arg in data]
+    path_split = full_path.split("/")
 
-        with open(file_path["--input"], "r") as file:
-            data = load(file)
-            list_prompt = [PromptModel(**arg) for arg in data]
+    name = path_split[(len(path_split) - 1)]
+    path_split.pop((len(path_split) - 1))
+    dir = "/".join(path_split)
 
-    except JSONDecodeError as e:
-        exit_error(JSONDecodeError(), f"Invalid JSON syntax at "
-                   f"line {e.lineno}.")
-
-    except Exception as e:
-        exit_error(ParsingError(), str(e))
-
-    return (list_func, list_prompt)
+    return (dir, name)

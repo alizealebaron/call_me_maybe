@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 11:04:41 by alebaron                                #
-# @update   : 2026/04/04 16:11:25 by alebaron                                #
+# @update   : 2026/04/09 11:08:33 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -32,7 +32,7 @@ def check_args(argc: int, argv: list[str]) -> dict[str, str]:
     valid_options = {"--functions_definition": "data/input/"
                      "functions_definition.json",
                      "--input": "data/input/function_calling_tests.json",
-                     "--output": "data/output/function_calls.json"
+                     "--output": "data/output/function_calling_results.json"
                      }
 
     # === Vérification du nombre d'arguments ====

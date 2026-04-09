@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 10:38:21 by alebaron                                #
-# @update   : 2026/04/07 11:23:03 by alebaron                                #
+# @update   : 2026/04/09 11:08:04 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -20,10 +20,12 @@
 
 import sys
 import os
+import json
 import time
 from llm_sdk import Small_LLM_Model
 from src.parsing.parsing_args import check_args
 from src.parsing.parsing_json import check_json
+from src.parsing.parsing_name import get_dir_and_name
 from src.algorithm.calling_llm import Call_Me_Maybe
 
 
@@ -49,10 +51,22 @@ def main():
 
     # === Calling (Maybe) the LLM ===
 
-    llm = Small_LLM_Model()
-    cmm = Call_Me_Maybe(list_prompt, list_function, llm)
+    # llm = Small_LLM_Model()
+    # cmm = Call_Me_Maybe(list_prompt, list_function, llm)
 
-    cmm.process()
+    # results = cmm.process()
+
+    results = {"test": "test"}
+
+    # === Save results to output file ===
+
+    out_dir, out_name = get_dir_and_name(file_path["--output"])
+
+    os.makedirs(out_dir, exist_ok=True)
+
+    output_file = os.path.join(out_dir, out_name)
+    with open(output_file, "w") as f:
+        json.dump(results, f, indent=2)
 
     # === Calculate time ===
 
@@ -63,12 +77,12 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        os.system("clear")
-        file = open("src/utils/interrupt.txt", "r", encoding='utf-8')
-        content = file.read()
-        print(content)
-    except Exception as e:
-        print(f"Error: {e}")
+    # try:
+    main()
+    # except KeyboardInterrupt:
+    #     os.system("clear")
+    #     file = open("src/utils/interrupt.txt", "r", encoding='utf-8')
+    #     content = file.read()
+    #     print(content)
+    # except Exception as e:
+    #     print(f"Error: {e}")
