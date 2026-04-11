@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/06 10:51:17 by alebaron                                #
-# @update   : 2026/04/11 11:22:30 by alebaron                                #
+# @update   : 2026/04/11 12:54:18 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -339,7 +339,7 @@ class Call_Me_Maybe():
 
         current_output = ""
         current_tokens: List[int] = []
-        max_tokens = 50  # Les strings peuvent être plus longues
+        max_tokens = 100  # Les strings peuvent être plus longues
 
         while len(current_tokens) < max_tokens:
 
