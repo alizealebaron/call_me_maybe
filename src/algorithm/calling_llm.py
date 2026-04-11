@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/06 10:51:17 by alebaron                                #
-# @update   : 2026/04/11 11:05:47 by alebaron                                #
+# @update   : 2026/04/11 11:17:20 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -132,7 +132,6 @@ class Call_Me_Maybe():
                     if next_position < len(name_encoding):
                         valid_tokens.add(name_encoding[next_position])
 
-            # Si aucun token valide, arrêter
             if not valid_tokens:
                 break
 
@@ -144,7 +143,6 @@ class Call_Me_Maybe():
             # Sélectionner le meilleur token valide
             best_token_id = int(np.argmax(logits_masked))
 
-            # Ajouter le token
             current_tokens.append(best_token_id)
             # Convertir en texte et ajouter
             token_string = this.__dict_vocab.get(best_token_id, "")
@@ -185,7 +183,8 @@ class Call_Me_Maybe():
                     prompt.prompt, func_name, previous_gen)
         return output
 
-    def gen_int_parameter(this, prompt: str, func_name: str, previous_gen: str) -> float | None:
+    def gen_int_parameter(this, prompt: str, func_name: str,
+                          previous_gen: str) -> float | None:
 
         # === Préparation des données ===
 
@@ -297,7 +296,7 @@ class Call_Me_Maybe():
                 except ValueError:
                     return None
 
-        # Nettoyer le résultat: garder seulement les caractères valides pour un nombre
+        # Garder seulement les caractères valides pour un nombre
         cleaned_output = ""
         for char in current_output:
             if char in '-0123456789.':
@@ -309,7 +308,8 @@ class Call_Me_Maybe():
         except ValueError:
             return None
 
-    def gen_str_parameter(this, prompt: str, func_name: str, previous_gen: str) -> str:
+    def gen_str_parameter(this, prompt: str, func_name: str,
+                          previous_gen: str) -> str:
 
         # === Préparation des données ===
 
