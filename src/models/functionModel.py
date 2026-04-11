@@ -6,11 +6,11 @@
 #         |_|   |_____| .fr         \_.____,*      (___/  (___/  (___/       #
 #                                                                            #
 # ************************************************************************** #
-# @name   : function.py                                                      #
+# @name   : functionModel.py                                                 #
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/06 10:32:38 by alebaron                                #
-# @update   : 2026/04/06 10:37:37 by alebaron                                #
+# @update   : 2026/04/11 11:01:27 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -35,3 +35,13 @@ class FunctionModel(BaseModel):
     description: str
     parameters: dict[str, dict[str, str]]
     returns: dict[str, str]
+
+    # +---------------------------------------------------------------------+
+    # |                               Methods                               |
+    # +---------------------------------------------------------------------+
+
+    def to_string(this) -> str:
+        return f"Function: {this.name}\n" + \
+            f"Description: {this.description}" + \
+            f"\nParameters: {this.parameters}" + \
+            f"\nReturns: {this.returns}"

@@ -37,6 +37,10 @@
 - [Analyser les données JSON en Python](https://brightdata.fr/blog/savoir-faire/parse-json-data-with-python)
 - [Utiliser JSON avec Python](https://www.docstring.fr/glossaire/json/)
 
+## Compréhension des LLMs
+
+- [Message et token spéciaux](https://huggingface.co/learn/agents-course/fr/unit1/messages-and-special-tokens)
+
 ### Autres projets Call Me Maybe
 
 - [Projet de shadox254](https://github.com/shadox254/Call-Me-Maybe)

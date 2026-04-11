@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/06 10:51:17 by alebaron                                #
-# @update   : 2026/04/09 10:51:24 by alebaron                                #
+# @update   : 2026/04/11 11:05:47 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -101,7 +101,8 @@ class Call_Me_Maybe():
 
         # Encodage du prompt
         full_prompt = available_function
-        full_prompt += f"\nResolve the following prompt: {prompt.prompt}\n"
+        full_prompt += f"\nResolve the following prompt: {prompt.prompt}\n" + \
+            "function name: "
         full_prompt_tokens = this.__llm.encode(full_prompt)
 
         # Récupération des données utiles
@@ -112,13 +113,8 @@ class Call_Me_Maybe():
 
         current_output = ""
         current_tokens: List[int] = []
-        max_tokens = 100
 
         while (True):
-
-            # Sécurité: limiter la longueur
-            if len(current_tokens) >= max_tokens:
-                break
 
             # Combiner les tokens: prompt + sortie actuelle
             all_tokens = full_prompt_tokens + current_tokens
@@ -189,15 +185,201 @@ class Call_Me_Maybe():
                     prompt.prompt, func_name, previous_gen)
         return output
 
-    def gen_int_parameter(this, prompt: str, func_name: str,
-                          previous_gen: str) -> float:
+    def gen_int_parameter(this, prompt: str, func_name: str, previous_gen: str) -> float | None:
 
-        pass
+        # === Préparation des données ===
 
-    def gen_str_parameter(this, prompt: str, func_name: str,
-                          previous_gen: str) -> str:
+        func = this.get_func_by_name(func_name)
 
-        pass
+        # Construire le prompt
+        full_prompt = f"To solve the prompt {prompt}, you " + \
+            f"will use the following function: {func}." + \
+            " Provide each parameter. Keep it concise and don't add" + \
+            " custom fields."
+
+        full_prompt = f"<|im_start|>user\n{full_prompt}<|im_end|>\n" + \
+            f"<|im_start|>assistant\n<think>\n\n</think>\n\n{previous_gen}"
+
+        # Caractères valides pour un float
+        valid_chars = set('-0123456789.\n')
+
+        # Créer dictionnaire: caractère -> tokens qui le représentent
+        char_to_tokens: Dict[str, List[int]] = {}
+        for char in valid_chars:
+            char_tokens = this.__llm.encode(char)
+            char_tokens = [t for sublist in char_tokens for t in sublist]
+            char_to_tokens[char] = char_tokens
+
+        # Encodage du prompt
+        full_prompt_tokens = this.__llm.encode(full_prompt)
+        full_prompt_tokens = [t for sublist in full_prompt_tokens
+                              for t in sublist]
+
+        # === Boucle de génération ===
+
+        current_output = ""
+        current_tokens: List[int] = []
+        max_tokens = 20  # Sécurité en cas de mauvaise génération
+        consecutive_rejects = 0
+        max_consecutive_rejects = 5
+
+        while len(current_tokens) < max_tokens:
+
+            # Combiner les tokens: prompt + sortie actuelle
+            all_tokens = full_prompt_tokens + current_tokens
+
+            # Récupération des logits
+            logits = this.__llm.get_logits_from_input_ids(all_tokens)
+
+            # Identifier les tokens valides
+            valid_tokens: set = set()
+            for char in valid_chars:
+                for token_id in char_to_tokens[char]:
+                    valid_tokens.add(token_id)
+
+            # Si aucun token valide, arrêter
+            if not valid_tokens:
+                break
+
+            # Constrained Decoding: appliquer le masque
+            logits_masked = np.full_like(logits, -np.inf, dtype=float)
+            for token_id in valid_tokens:
+                logits_masked[token_id] = logits[token_id]
+
+            # Sélectionner le meilleur token valide
+            best_token_id = int(np.argmax(logits_masked))
+
+            # Ajouter le token
+            current_tokens.append(best_token_id)
+
+            # Convertir en texte et ajouter
+            token_string = this.__dict_vocab.get(best_token_id, "")
+
+            temp_output = current_output + token_string
+
+            # === Validation des règles de nombre ===
+            is_valid = True
+
+            # Pas deux '.'
+            if temp_output.count('.') >= 2:
+                is_valid = False
+
+            # Pas deux '-'
+            elif temp_output.count('-') >= 2:
+                is_valid = False
+
+            # '-' seulement au début
+            elif temp_output.count('-') == 1 and temp_output[0] != '-':
+                is_valid = False
+
+            if not is_valid:
+                current_tokens.pop()
+                consecutive_rejects += 1
+                if consecutive_rejects >= max_consecutive_rejects:
+                    break
+                continue
+
+            current_output = temp_output
+
+            # Vérifier si on a un nombre valide complet
+            try:
+                float(current_output)
+                if token_string not in '0123456789.-':
+                    break
+            except ValueError:
+                pass
+
+            # Si '\n' rencontré, extraire et retourner
+            if '\n' in current_output:
+                current_output = current_output.split('\n')[0]
+                try:
+                    return float(current_output)
+                except ValueError:
+                    return None
+
+        # Nettoyer le résultat: garder seulement les caractères valides pour un nombre
+        cleaned_output = ""
+        for char in current_output:
+            if char in '-0123456789.':
+                cleaned_output += char
+
+        # Retourner ce qu'on a généré
+        try:
+            return float(cleaned_output)
+        except ValueError:
+            return None
+
+    def gen_str_parameter(this, prompt: str, func_name: str, previous_gen: str) -> str:
+
+        # === Préparation des données ===
+
+        func = this.get_func_by_name(func_name)
+
+        # Construire le prompt
+        full_prompt = f"To solve the prompt {prompt}, you " + \
+            f"will use the following function: {func.to_string()}.\n" + \
+            "Provide each parameter. Keep it concise." + \
+            " End each parameter with an new ligne."
+
+        full_prompt = f"<|im_start|>user\n{full_prompt}<|im_end|>\n" + \
+            f"<|im_start|>assistant\n<think>\n\n</think>\n\n{previous_gen}"
+
+        # Encodage du prompt
+        full_prompt_tokens = this.__llm.encode(full_prompt)
+        full_prompt_tokens = [t for sublist in full_prompt_tokens
+                              for t in sublist]
+
+        # === Boucle de génération ===
+
+        current_output = ""
+        current_tokens: List[int] = []
+        max_tokens = 50  # Les strings peuvent être plus longues
+
+        while len(current_tokens) < max_tokens:
+
+            # Combiner les tokens: prompt + sortie actuelle
+            all_tokens = full_prompt_tokens + current_tokens
+
+            # Récupération des logits
+            logits = this.__llm.get_logits_from_input_ids(all_tokens)
+
+            # Sélectionner le meilleur token
+            best_token_id = int(np.argmax(logits))
+
+            # Ajouter le token
+            current_tokens.append(best_token_id)
+
+            # Convertir en texte et ajouter
+            token_string = this.__dict_vocab.get(best_token_id, "")
+
+            # Sécurité: si token vide, arrêter
+            if not token_string or token_string.strip() == "":
+                break
+
+            current_output += token_string
+
+            # Arrêter si caractère spécial \u010a rencontré
+            if '\u010a' in current_output:
+                current_output = current_output.split('\u010a')[0]
+                break
+
+            # Arrêter si '\n' rencontré
+            if '\n' in current_output:
+                current_output = current_output.split('\n')[0]
+                break
+
+            # Arrêter si plusieurs espaces consécutifs
+            if '  ' in current_output:
+                current_output = current_output.split('  ')[0]
+                break
+
+        # Nettoyer: supprimer les espaces extra et caractères indésirables
+        final_value = current_output.strip()
+        # Supprimer les caractères spéciaux
+        final_value = final_value.replace('\u0120', ' ')
+        final_value = final_value.replace('  ', '')
+
+        return final_value
 
     # +---------------------------------------------------------------------+
     # |                         Méthodes utilitaires                        |

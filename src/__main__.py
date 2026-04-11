@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 10:38:21 by alebaron                                #
-# @update   : 2026/04/09 11:08:04 by alebaron                                #
+# @update   : 2026/04/11 11:11:56 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -51,12 +51,10 @@ def main():
 
     # === Calling (Maybe) the LLM ===
 
-    # llm = Small_LLM_Model()
-    # cmm = Call_Me_Maybe(list_prompt, list_function, llm)
+    llm = Small_LLM_Model()
+    cmm = Call_Me_Maybe(list_prompt, list_function, llm)
 
-    # results = cmm.process()
-
-    results = {"test": "test"}
+    results = cmm.process()
 
     # === Save results to output file ===
 
@@ -73,16 +71,18 @@ def main():
     end_time = time.time()
     prog_time = end_time - start_time
 
-    print(f"Programme executed in {prog_time}")
+    minutes = int(prog_time // 60)
+    seconds = int(prog_time % 60)
+    print(f"Programme executed in {minutes} min {seconds} sec")
 
 
 if __name__ == "__main__":
-    # try:
-    main()
-    # except KeyboardInterrupt:
-    #     os.system("clear")
-    #     file = open("src/utils/interrupt.txt", "r", encoding='utf-8')
-    #     content = file.read()
-    #     print(content)
-    # except Exception as e:
-    #     print(f"Error: {e}")
+    try:
+        main()
+    except KeyboardInterrupt:
+        os.system("clear")
+        file = open("src/utils/interrupt.txt", "r", encoding='utf-8')
+        content = file.read()
+        print(content)
+    except Exception as e:
+        print(f"Error: {e}")
