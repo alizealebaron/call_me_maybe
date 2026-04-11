@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 11:04:41 by alebaron                                #
-# @update   : 2026/04/09 11:08:33 by alebaron                                #
+# @update   : 2026/04/11 13:30:18 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -26,6 +26,19 @@ from src.utils.error import exit_argument_error, exit_error, ArgumentError
 # +-------------------------------------------------------------------------+
 
 def check_args(argc: int, argv: list[str]) -> dict[str, str]:
+    """
+    Checks the command-line arguments for validity and returns a dictionary
+    containing the paths for the functions definition, input, and output
+    files.
+
+    Args:
+        argc (int): The number of command-line arguments.
+        argv (list[str]): The list of command-line arguments.
+
+    Returns:
+        dict[str, str]: A dictionary containing the paths for the functions
+            definition, input, and output files.
+    """
 
     # === Déclaration des options valides ====
 

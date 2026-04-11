@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 16:00:28 by alebaron                                #
-# @update   : 2026/04/11 11:22:17 by alebaron                                #
+# @update   : 2026/04/11 13:32:16 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -31,6 +31,19 @@ from src.models.promptModel import PromptModel
 
 def check_json(file_path: dict[str, str]) -> Tuple[list[FunctionModel],
                                                    list[PromptModel]]:
+    """
+    Checks the validity of the JSON files specified in the file_path dictionary
+    and returns a tuple containing a list of FunctionModel instances and a list
+    of PromptModel instances.
+
+    Args:
+        file_path (dict[str, str]): A dictionary containing the paths for the
+            functions definition and input files.
+
+    Returns:
+        Tuple[list[FunctionModel], list[PromptModel]]: A tuple containing a
+            list of FunctionModel instances and of PromptModel instances.
+    """
 
     try:
         with open(file_path["--functions_definition"], "r") as file:

@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 10:38:21 by alebaron                                #
-# @update   : 2026/04/11 11:22:32 by alebaron                                #
+# @update   : 2026/04/11 13:33:41 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -34,6 +34,20 @@ from src.algorithm.calling_llm import Call_Me_Maybe
 # +-------------------------------------------------------------------------+
 
 def main() -> None:
+    """
+    The main function of the program, responsible for orchestrating the entire
+    process. It performs the following steps:
+
+    1. Records the starting time of the program.
+    2. Retrieves and checks the command-line arguments.
+    3. Parses the input JSON file to extract the list of functions and prompts.
+    4. Initializes the LLM model and the Call_Me_Maybe algorithm with the
+       parsed data.
+    5. Executes the Call_Me_Maybe algorithm to process the prompts and
+       functions.
+    6. Saves the results to the specified output file.
+    7. Calculates and prints the total execution time of the program.
+    """
 
     # === Starting time ===
 

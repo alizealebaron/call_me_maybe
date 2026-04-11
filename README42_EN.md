@@ -296,3 +296,11 @@ token_seq = [t for sublist in encoding for t in sublist]
 3. **Documentation and Comments**
    - Generation of certain docstrings and class documentation
    - Correction of spelling errors and reformulation
+
+## License
+
+This project is licensed under CC0 1.0 Universal (Public Domain).
+
+---
+
+**Last Update**: April 11, 2026

@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/06 10:37:57 by alebaron                                #
-# @update   : 2026/04/06 10:47:11 by alebaron                                #
+# @update   : 2026/04/11 13:29:34 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -26,6 +26,12 @@ from pydantic import BaseModel
 # +-------------------------------------------------------------------------+
 
 class PromptModel(BaseModel):
+    """
+    A class representing a prompt model, containing the prompt string.
+
+    Attributes:
+        prompt (str): The prompt string to be used for the language model.
+    """
 
     # +---------------------------------------------------------------------+
     # |                              Attributs                              |

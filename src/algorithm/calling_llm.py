@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/06 10:51:17 by alebaron                                #
-# @update   : 2026/04/11 12:54:18 by alebaron                                #
+# @update   : 2026/04/11 13:27:43 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -32,6 +32,24 @@ from src.utils.error import exit_error
 # +-------------------------------------------------------------------------+
 
 class Call_Me_Maybe():
+    """
+    This class is responsible for processing the prompts and generating the
+    function names and parameters using the LLM.
+
+    Methods:
+    - process: Main method to process all prompts and generate outputs.
+    - gen_function_name: Generates the function name for a given prompt.
+    - gen_func_param: Generates the parameters for a given function name
+        and prompt.
+    - gen_int_parameter: Generates a numeric parameter value.
+    - gen_str_parameter: Generates a string parameter value.
+    - get_available_func: Returns a string listing all available functions.
+    - get_id_to_token_vocab: Creates a mapping from token IDs to their
+        string representations.
+    - get_func_para_by_name: Retrieves the parameters of a function by
+        its name.
+    - get_func_by_name: Retrieves the FunctionModel instance by its name.
+    """
 
     # +---------------------------------------------------------------------+
     # |                             Constructeur                            |
@@ -40,6 +58,16 @@ class Call_Me_Maybe():
     def __init__(this, list_prompt: list[PromptModel],
                  list_function: list[FunctionModel],
                  llm: Small_LLM_Model):
+        """
+        Initializes the Call_Me_Maybe instance.
+
+        Args:
+        - list_prompt: A list of PromptModel instances representing the
+            prompts to process.
+        - list_function: A list of FunctionModel instances representing the
+            available functions.
+        - llm: An instance of the Small_LLM_Model to use for generation.
+        """
 
         this.__list_prompt = list_prompt
         this.__list_function = list_function
@@ -55,6 +83,14 @@ class Call_Me_Maybe():
     # +---------------------------------------------------------------------+
 
     def process(this) -> List[Any]:
+        """
+        Processes all prompts and generates the corresponding function names
+        and parameters.
+
+        Returns:
+            - list[Any]: A list of dictionaries, each containing the prompt,
+                generated function name, and parameters.
+        """
 
         # === Boucle sur tous les prompts ===
 
@@ -84,6 +120,17 @@ class Call_Me_Maybe():
     # +---------------------------------------------------------------------+
 
     def gen_function_name(this, prompt: PromptModel) -> str:
+        """
+        Generates the function name for a given prompt using constrained
+        decoding.
+
+        Args:
+            - prompt (PromptModel): A PromptModel instance containing
+                the prompt to process.
+
+        Returns:
+            - str: The generated function name.
+        """
 
         # === Préparation des données ===
 
@@ -160,6 +207,17 @@ class Call_Me_Maybe():
 
     def gen_func_param(this, prompt: PromptModel,
                        func_name: str) -> Dict[Any, Any]:
+        """
+        Generates the parameters for a given function name and prompt.
+
+        Args:
+            - prompt (PromptModel): A PromptModel instance containing the
+                prompt to process.
+            - func_name (str): The name of the function for which to generate
+                parameters.
+        Returns:
+            - Dict[Any, Any]: A dictionary containing the generated parameters.
+        """
 
         # Récupération des paramètres demandés
         func_params = this.get_func_para_by_name(func_name)
@@ -188,6 +246,21 @@ class Call_Me_Maybe():
 
     def gen_int_parameter(this, prompt: str, func_name: str,
                           previous_gen: str) -> float | None:
+        """
+        Generates a numeric parameter value for a given prompt and function
+        name.
+
+        Args:
+            - prompt (str): The prompt for which to generate the parameter.
+            - func_name (str): The name of the function for which to generate
+                the parameter.
+            - previous_gen (str): A string containing the previously generated
+                parameters to provide context for the LLM.
+
+        Returns:
+        - float | None: The generated numeric parameter value, or None if
+            generation fails.
+        """
 
         # === Préparation des données ===
 
@@ -313,6 +386,18 @@ class Call_Me_Maybe():
 
     def gen_str_parameter(this, prompt: str, func_name: str,
                           previous_gen: str) -> str:
+        """
+        Generates a string parameter value for a given prompt and function
+        name.
+        Args:
+            - prompt (str): The prompt for which to generate the parameter.
+            - func_name (str): The name of the function for which to generate
+                the parameter.
+            - previous_gen (str): A string containing the previously generated
+                parameters to provide context for the LLM.
+        Returns:
+            - str: The generated string parameter value.
+        """
 
         # === Préparation des données ===
 
@@ -392,6 +477,13 @@ class Call_Me_Maybe():
     # +---------------------------------------------------------------------+
 
     def get_available_func(this) -> str:
+        """
+        Returns a string listing all available functions with their
+        descriptionsand parameters.
+
+        Returns:
+            - str: A formatted string listing all available functions.
+        """
 
         available_func = "List of all available functions :\n"
 
@@ -411,6 +503,16 @@ class Call_Me_Maybe():
         return available_func
 
     def get_id_to_token_vocab(self, path: str) -> dict[int, str]:
+        """
+        Creates a mapping from token IDs to their string representations.
+
+        Args:
+            path (str): The path to the vocabulary file.
+
+        Returns:
+            dict[int, str]: A dictionary mapping token IDs to their string
+                representations.
+        """
 
         try:
             with open(path, "r") as file:
@@ -426,6 +528,17 @@ class Call_Me_Maybe():
             exit_error(Exception(), str(e))
 
     def get_func_para_by_name(this, name: str) -> Dict[str, Any] | None:
+        """
+        Retrieves the parameters of a function by its name.
+
+        Args:
+            name (str): The name of the function for which
+                to retrieve parameters.
+
+        Returns:
+            Dict[str, Any] | None: A dictionary of parameters if
+                the function is found, or None if not found.
+        """
 
         for func in this.__list_function:
             if func.name == name:
