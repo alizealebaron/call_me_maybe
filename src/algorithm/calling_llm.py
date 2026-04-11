@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/06 10:51:17 by alebaron                                #
-# @update   : 2026/04/11 11:17:20 by alebaron                                #
+# @update   : 2026/04/11 11:22:30 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -164,6 +164,9 @@ class Call_Me_Maybe():
         # Récupération des paramètres demandés
         func_params = this.get_func_para_by_name(func_name)
 
+        if func_params is None:
+            return {}
+
         # Génération des paramètres
         output: Dict[str, Any] = {}
         previous_gen = ""
@@ -315,6 +318,9 @@ class Call_Me_Maybe():
 
         func = this.get_func_by_name(func_name)
 
+        if func is None:
+            return ""
+
         # Construire le prompt
         full_prompt = f"To solve the prompt {prompt}, you " + \
             f"will use the following function: {func.to_string()}.\n" + \
@@ -417,9 +423,9 @@ class Call_Me_Maybe():
             return rev_vocab
 
         except Exception as e:
-            exit_error(Exception(), e)
+            exit_error(Exception(), str(e))
 
-    def get_func_para_by_name(this, name: str) -> str | None:
+    def get_func_para_by_name(this, name: str) -> Dict[str, Any] | None:
 
         for func in this.__list_function:
             if func.name == name:

@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 16:00:28 by alebaron                                #
-# @update   : 2026/04/07 13:53:27 by alebaron                                #
+# @update   : 2026/04/11 11:22:17 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -42,7 +42,7 @@ def check_json(file_path: dict[str, str]) -> Tuple[list[FunctionModel],
             list_prompt = [PromptModel(**arg) for arg in data]
 
     except JSONDecodeError as e:
-        exit_error(JSONDecodeError(), f"Invalid JSON syntax at "
+        exit_error(ParsingError(), f"Invalid JSON syntax at "
                    f"line {e.lineno}.")
 
     except Exception as e:

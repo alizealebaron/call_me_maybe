@@ -10,8 +10,14 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/02/27 14:26:28 by alebaron                                #
-# @update   : 2026/04/04 16:11:49 by alebaron                                #
+# @update   : 2026/04/11 11:23:11 by alebaron                                #
 # ************************************************************************** #
+
+# +--------------------------------------------------------------------------+
+# |                               Importation                                |
+# +--------------------------------------------------------------------------+
+
+from typing import NoReturn
 
 # +--------------------------------------------------------------------------+
 # |                                  Class                                   |
@@ -36,7 +42,7 @@ class ArgumentError(Exception):
 # |                                 Function                                 |
 # +--------------------------------------------------------------------------+
 
-def exit_error(error_type: Exception, message: str) -> None:
+def exit_error(error_type: Exception, message: str) -> NoReturn:
     """
     Print an error message and exit the program.
 

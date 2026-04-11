@@ -10,7 +10,7 @@
 # @author : alebaron <alebaron@student.42lehavre.fr>                         #
 #                                                                            #
 # @creation : 2026/04/04 10:38:21 by alebaron                                #
-# @update   : 2026/04/11 11:11:56 by alebaron                                #
+# @update   : 2026/04/11 11:22:32 by alebaron                                #
 # ************************************************************************** #
 
 # +-------------------------------------------------------------------------+
@@ -33,7 +33,7 @@ from src.algorithm.calling_llm import Call_Me_Maybe
 # |                                  Main                                   |
 # +-------------------------------------------------------------------------+
 
-def main():
+def main() -> None:
 
     # === Starting time ===
 
