@@ -9,7 +9,7 @@
 
 <div align="center">
   <p>
-      <!-- <img src="https://img.shields.io/badge/score-125%20%2F%20100-success?style=for-the-badge" /> -->
+[      <img src="https://img.shields.io/badge/score-106%20%2F%20100-success?style=for-the-badge" />
       <img src="https://img.shields.io/github/languages/count/alizealebaron/call_me_maybe?style=for-the-badge&logo=" />
       <img src="https://img.shields.io/github/languages/top/alizealebaron/call_me_maybe?style=for-the-badge" />
       <img src="https://img.shields.io/github/last-commit/alizealebaron/call_me_maybe?style=for-the-badge" />
@@ -27,7 +27,7 @@
 
 **Commencé le :** 02/04/2026
 
-**Rendu le :** Non rendu.
+**Rendu le :** 14/04/2026.
 
 ## Description
 
